@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="noteTitle" type="id"/>
+    <item name="noteType" type="id"/>
+    <item name="noteContent" type="id"/>
+    <item name="doneButton" type="id"/>
+</resources>
