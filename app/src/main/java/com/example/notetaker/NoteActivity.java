@@ -31,7 +31,6 @@ public class NoteActivity extends AppCompatActivity {
             String type = intent.getStringExtra("type");
             noteTitle.setText(title);
             content.setText(noteContent);
-            //noteType.
         }
 
         noteType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
