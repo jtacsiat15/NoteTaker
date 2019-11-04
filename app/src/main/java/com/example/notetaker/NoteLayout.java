@@ -16,17 +16,23 @@ public class NoteLayout extends GridLayout {
     public NoteLayout(final Context context){
         super(context);
         setColumnCount(2);
-        final Note note = new Note();
+        GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+        layoutParams.width = LayoutParams.MATCH_PARENT;
+        layoutParams.height = LayoutParams.MATCH_PARENT;
+        this.setLayoutParams(layoutParams);
+
         final String TAG = "inNoteLayout";
 
         //creates title editText
         final EditText noteTitle = new EditText(context);
+        noteTitle.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(0)));
         noteTitle.setHint("Title");
         noteTitle.setId(R.id.noteTitle);
         addView(noteTitle);
 
         //adds spinner type
         final Spinner noteType = new Spinner(context);
+        noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(1)));
         noteType.setId(R.id.noteType);
         String[] typeArray = getResources().getStringArray(R.array.noteTypesArray);
         Log.d(TAG, "Creating Spinner: " + typeArray[0]);
@@ -36,12 +42,15 @@ public class NoteLayout extends GridLayout {
 
         //adds content to take notes with
         final EditText content = new EditText(context);
+        content.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(1, 1, 5), GridLayout.spec(0, 2)));
         content.setId(R.id.noteContent);
+
         content.setHint("Content");
         addView(content);
 
         //adds done button
         Button doneButton = new Button(context);
+        content.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(2, 1, 1), GridLayout.spec(0, 2)));
         doneButton.setId(R.id.doneButton);
         doneButton.setText("Done");
         addView(doneButton);

@@ -1,8 +1,10 @@
 package com.example.notetaker;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 
-public class Note {
+public class Note implements Serializable {
     private String title;
     private String content;
     private String type;
@@ -13,9 +15,9 @@ public class Note {
         this.type="";
     }
     public Note(String title, String content, String type){
-        this.title=type;
-        this.content=content;
-        this.type=type;
+        this.title = type;
+        this.content = content;
+        this.type = type;
     }
 
     public String getType() {

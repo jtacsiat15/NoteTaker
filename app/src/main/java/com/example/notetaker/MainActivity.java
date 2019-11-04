@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,35 +23,27 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
-    final String TAG = "inMainActivity";
-    String title;
-    String content;
-    String type;
     List<Note> notebook = new ArrayList<>();
-    ArrayAdapter<Note> arrayAdapter = new ArrayAdapter<>(
-            this,
-            android.R.layout.simple_list_item_1,
-            notebook
-    );
-    //Note note = new Note();
+    Note newNote;
+    final String TAG = "inMainActivity";
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            title = data.getStringExtra("title");
-            content = data.getStringExtra("content");
-            type = data.getStringExtra("type");
-//            note.setTitle(title);
-//            note.setType(type);
-//            note.setContent(content);
-            Log.d(TAG, "\n\ngetting extras\n\n" + "Title: " + title + " content: " + content + " Type: " + type);
+            newNote = (Note)data.getSerializableExtra("note");
+
+            Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (newNote != null) {
+            notebook.add(newNote);
+            newNote = null;
+        }
     }
 
     @Override
@@ -64,42 +57,32 @@ public class MainActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         newNote.setText(R.string.add_note);
         newNote.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+
 //        final List<Note> notebook = new ArrayList<>();
-//        final ArrayAdapter<Note> arrayAdapter = new ArrayAdapter<>(
-//                this,
-//                android.R.layout.simple_list_item_1,
-//                notebook
-//        );
+        final ArrayAdapter<Note> arrayAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                notebook
+        );
         layout.addView(newNote);
         notesList.setAdapter(arrayAdapter);
         layout.addView(notesList);
         setContentView(layout);
 
-        //notebook.add(note);
-        //notebook.add("two");
-        //notebook.add("three");
-
         newNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO add second activity to use explicit intent
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-                //Intent intent = getIntent();
-                Note note = new Note();
+                intent.putExtra("note", new Note());
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
-                note.setTitle(intent.getStringExtra("title"));
-                //intent.putExtra("type", note.getType());
-                note.setContent(intent.getStringExtra("content"));
-                //Log.d("inNewNote", "Title: " + note.getTitle() + " content: " + note.getContent() + "Type: " + note.getType());
-                notebook.add(note);
             }
         });
 
         notesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO add second activity to use explicit intent
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+                intent.putExtra("note", notebook.get(i));
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
@@ -114,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // TODO remove note from list
-                                //notebook.remove(1);
-                                //arrayAdapter.notifyDataSetChanged();
+                                notebook.remove(i);
+                                arrayAdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("NO", null)
