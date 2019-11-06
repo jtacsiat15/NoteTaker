@@ -61,7 +61,7 @@ public class NoteLayout extends GridLayout {
         doneButton.setLayoutParams(buttonParams);
         content.setLayoutParams(layoutParams);
         doneButton.setId(R.id.doneButton);
-        doneButton.setGravity(Gravity.BOTTOM);
+        //doneButton.setGravity(Gravity.BOTTOM);
         doneButton.setText("Done");
         addView(doneButton);
     }

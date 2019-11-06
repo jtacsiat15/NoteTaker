@@ -1,6 +1,7 @@
 package com.example.notetaker;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ListView;
@@ -14,9 +15,8 @@ public class MainLayout extends GridLayout {
 
         setColumnCount(1);
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-        layoutParams.width = LayoutParams.MATCH_PARENT;
-        layoutParams.height = LayoutParams.WRAP_CONTENT;
-        //this.setLayoutParams(layoutParams);
+        layoutParams.rowSpec = GridLayout.spec(0, 1,1/2);
+        layoutParams.columnSpec = GridLayout.spec(0, 1, 1);
 
         newNoteButton = new Button(context);
         newNoteButton.setId(R.id.newNoteButton);
@@ -24,9 +24,13 @@ public class MainLayout extends GridLayout {
         newNoteButton.setLayoutParams(layoutParams);
         this.addView(newNoteButton);
 
+        GridLayout.LayoutParams notesListLayout = new GridLayout.LayoutParams();
+        notesListLayout.rowSpec = GridLayout.spec(1, 1, 1);
+        notesListLayout.columnSpec = GridLayout.spec(0, 1, 1);
         notesListView = new ListView(context);
         notesListView.setId(R.id.notesListView);
-        //notesListView.setLayoutParams(layoutParams);
+        notesListLayout.setGravity(Gravity.TOP);
+        notesListView.setLayoutParams(notesListLayout);
         this.addView(notesListView);
     }
 }
