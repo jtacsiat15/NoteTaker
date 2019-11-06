@@ -20,19 +20,19 @@ public class NoteLayout extends GridLayout {
         setColumnCount(3);
 
         GridLayout.LayoutParams layoutParams = new LayoutParams();
-        layoutParams.rowSpec = GridLayout.spec(0, 1, 1);
-        layoutParams.columnSpec = GridLayout.spec(0, 3, 1);
+        //layoutParams.columnSpec = GridLayout.spec(0, 3, 1);
+        layoutParams.width = LayoutParams.MATCH_PARENT;
 
         //creates title editText
         final EditText noteTitle = new EditText(context);
-        noteTitle.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(0, 2, 1)));
+        noteTitle.setLayoutParams(layoutParams);
         noteTitle.setHint("Title");
         noteTitle.setId(R.id.noteTitle);
         addView(noteTitle);
 
         //adds spinner type
         final Spinner noteType = new Spinner(context);
-        noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(2, 1, 1)));
+        noteType.setLayoutParams(layoutParams);
         noteType.setId(R.id.noteType);
         ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 context,
