@@ -7,11 +7,11 @@ import android.widget.GridLayout;
 import android.widget.ListView;
 
 public class MainLayout extends GridLayout {
-    ListView notesListView;
-    Button newNoteButton;
-
     public MainLayout(Context context) {
         super(context);
+
+        ListView notesListView;
+        Button newNoteButton;
 
         setColumnCount(1);
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();

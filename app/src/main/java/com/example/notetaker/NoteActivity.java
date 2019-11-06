@@ -2,13 +2,11 @@ package com.example.notetaker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Person;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,12 +17,13 @@ import android.widget.Spinner;
  */
 public class NoteActivity extends AppCompatActivity {
     final String TAG = "inNoteActivity";
-    Note note;
-    int index;
     static final int PERSONAL = 0;
     static final int SCHOOL = 1;
     static final int WORK = 2;
     static final int OTHER = 3;
+
+    private Note note;
+    private int index;
 
     /**
      * When activity is initialized, note is gathered from intent and view is updated
@@ -101,13 +100,15 @@ public class NoteActivity extends AppCompatActivity {
      * @return int indicating index in spinner of a certain type
      */
     private int getAdapterIndex() {
-        if (note.getType().equals("Other")) {
-            return OTHER;
-        } else if (note.getType().equals("School")) {
-            return SCHOOL;
-        } else if (note.getType().equals("Work")) {
-            return WORK;
+        switch (note.getType()) {
+            case "Other":
+                return OTHER;
+            case "School":
+                return SCHOOL;
+            case "Work":
+                return WORK;
+            default:
+                return PERSONAL;
         }
-        return PERSONAL;
     }
 }

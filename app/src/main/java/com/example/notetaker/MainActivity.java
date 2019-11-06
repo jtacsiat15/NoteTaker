@@ -32,12 +32,10 @@ public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
     static final String TAG = "inMainActivity";
 
-    ArrayAdapter<Note> arrayAdapter;
-    ListView notes;
-    Button createNewNote;
-    List<Note> notebook;
-    Note newNote;
-    int index;
+    private ArrayAdapter<Note> arrayAdapter;
+    private List<Note> notebook;
+    private Note newNote;
+    private int index;
 
 
     /**
@@ -94,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(layout);
 
         notebook = new ArrayList<>();
-        createNewNote = findViewById(R.id.newNoteButton);
-        notes = findViewById(R.id.notesListView);
+        Button createNewNote = findViewById(R.id.newNoteButton);
+        ListView notes = findViewById(R.id.notesListView);
         arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
