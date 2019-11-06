@@ -13,6 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+/**
+ * This class is the activity for users to edit a note. Users can change the title,
+ * content, type and save the note when they are finished.
+ */
 public class NoteActivity extends AppCompatActivity {
     final String TAG = "inNoteActivity";
     Note note;
@@ -22,6 +26,12 @@ public class NoteActivity extends AppCompatActivity {
     static final int WORK = 2;
     static final int OTHER = 3;
 
+    /**
+     * When activity is initialized, note is gathered from intent and view is updated
+     * to reflect current note contents. Sets up click listener for done button and
+     * connects all view elements from layout
+     * @param savedInstanceState bundle saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +55,13 @@ public class NoteActivity extends AppCompatActivity {
         noteType.setSelection(getAdapterIndex());
 
         noteType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Sets the note type when a new type is selected from the spinner
+             * @param adapterView adapter view for type selection spinner
+             * @param view spinner element
+             * @param i index of spinner selection
+             * @param l
+             */
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selection = adapterView.getItemAtPosition(i).toString();
@@ -58,6 +75,12 @@ public class NoteActivity extends AppCompatActivity {
 
         Button doneButton = findViewById(R.id.doneButton);
         doneButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When user clicks 'Done', gets all changes from the edittexts and updates the
+             * note object then passes the note object and index in an intent back to main
+             * activity. Finishes NoteActivity
+             * @param view done button
+             */
             @Override
             public void onClick(View view) {
                 note.setTitle(noteTitle.getText().toString());
@@ -73,6 +96,10 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gets the index in the adapter of a string type
+     * @return int indicating index in spinner of a certain type
+     */
     private int getAdapterIndex() {
         if (note.getType().equals("Other")) {
             return OTHER;

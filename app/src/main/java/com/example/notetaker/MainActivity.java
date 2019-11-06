@@ -21,6 +21,13 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the main activity of our notes app. Here, users will be able
+ * to create a new note, view a list of their existing notes, select a note to
+ * edit and delete a note by long pressing. When a user is finished creating or
+ * editing a note, they will return to this screen and see their note added to
+ * the list.
+ */
 public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
     static final String TAG = "inMainActivity";
@@ -33,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
     int index;
 
 
+    /**
+     * When user finishes creating note, gets index and note from intent extras
+     * @param requestCode a request code
+     * @param resultCode activity result code
+     * @param data intent received as result
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -44,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * After activity result is gathered, note from result is inserted into list or
+     * edited note is updated in the list. If index == -1, note is a new note to insert
+     * else index is the note's position in the list of notes
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -62,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Runs when app's main activity is created. Sets up click listeners for the new note
+     * button and the adapter and listeners for the listview containing the notes. Initializes
+     * a notebook to store notes in
+     * @param savedInstanceState bundle containing saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         notes.setAdapter(arrayAdapter);
 
         createNewNote.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Click listener for the new note button. Creates an intent that passes a new note
+             * object to NoteActivity and index -1 to indicate a new note
+             * @param view a button element
+             */
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
@@ -89,6 +119,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * Click listener for the array adapter. Creates an intent to pass the selected note
+             * to NoteActivity and the index of the note to be edited in the ArrayList.
+             * @param adapterView adapter view for our note list
+             * @param view the listview that user is selecting from
+             * @param i index selected
+             * @param l
+             */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
@@ -99,6 +137,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         notes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            /**
+             * Executes when a user long clicks on an element. Shows popup menu to delete
+             * an item in a list. If user confirms, item is removed from the list
+             * @param adapterView adapter view of the list
+             * @param view a listview containing notes
+             * @param i index of click
+             * @param l
+             * @return true if event is handled, false otherwise
+             */
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -106,6 +153,11 @@ public class MainActivity extends AppCompatActivity {
                 alertBuilder.setTitle("Delete a Note")
                         .setMessage("Are you sure you want to delete your " + adapterView.getItemAtPosition(i) + " note?")
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            /**
+                             * Deletes a note when user confirms delete in popup dialog box
+                             * @param dialogInterface a dialog box
+                             * @param i
+                             */
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Log.d(TAG, "delete index: " + i);
