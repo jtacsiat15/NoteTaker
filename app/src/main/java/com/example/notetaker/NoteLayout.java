@@ -13,36 +13,37 @@ import android.widget.GridLayout;
 import android.widget.Spinner;
 
 public class NoteLayout extends GridLayout {
+    static final String TAG = "inNoteLayout";
+
     public NoteLayout(final Context context){
         super(context);
-        setColumnCount(2);
-        GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-        layoutParams.width = LayoutParams.MATCH_PARENT;
-        layoutParams.height = LayoutParams.MATCH_PARENT;
-        this.setLayoutParams(layoutParams);
+        setColumnCount(3);
 
-        final String TAG = "inNoteLayout";
+        GridLayout.LayoutParams layoutParams = new LayoutParams();
+        layoutParams.rowSpec = GridLayout.spec(0, 1, 1);
+        layoutParams.columnSpec = GridLayout.spec(0, 3, 1);
 
         //creates title editText
         final EditText noteTitle = new EditText(context);
-        noteTitle.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(0)));
+        noteTitle.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(0, 2, 1)));
         noteTitle.setHint("Title");
         noteTitle.setId(R.id.noteTitle);
         addView(noteTitle);
 
         //adds spinner type
         final Spinner noteType = new Spinner(context);
-        noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(1)));
+        noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1), GridLayout.spec(2, 1, 1)));
         noteType.setId(R.id.noteType);
-        String[] typeArray = getResources().getStringArray(R.array.noteTypesArray);
-        Log.d(TAG, "Creating Spinner: " + typeArray[0]);
-        ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(context,R.array.noteTypesArray,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
+                context,
+                R.array.noteTypesArray,
+                android.R.layout.simple_spinner_item);
         noteType.setAdapter(spinnerArrayAdapter);
         addView(noteType);
 
         //adds content to take notes with
         final EditText content = new EditText(context);
-        content.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(1, 1, 5), GridLayout.spec(0, 2)));
+        content.setLayoutParams(layoutParams);
         content.setId(R.id.noteContent);
 
         content.setHint("Content");
@@ -50,7 +51,7 @@ public class NoteLayout extends GridLayout {
 
         //adds done button
         Button doneButton = new Button(context);
-        content.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(2, 1, 1), GridLayout.spec(0, 2)));
+        content.setLayoutParams(layoutParams);
         doneButton.setId(R.id.doneButton);
         doneButton.setText("Done");
         addView(doneButton);

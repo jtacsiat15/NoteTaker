@@ -15,7 +15,7 @@ import android.widget.Spinner;
 
 public class NoteActivity extends AppCompatActivity {
     final String TAG = "inNoteActivity";
-    final Note note = new Note();
+    Note note;
     static final int PERSONAL = 0;
     static final int SCHOOL = 1;
     static final int WORK = 2;
@@ -32,11 +32,9 @@ public class NoteActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent != null){
-            String title =  intent.getStringExtra("title");
-            String noteContent = intent.getStringExtra("content");
-            String type = intent.getStringExtra("type");
-            noteTitle.setText(title);
-            content.setText(noteContent);
+            note = (Note)intent.getSerializableExtra("note");
+            noteTitle.setText(note.getTitle());
+            content.setText(note.getContent());
         }
 
         noteTitle.setText(note.getTitle());

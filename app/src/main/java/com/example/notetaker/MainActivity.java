@@ -23,9 +23,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
-    List<Note> notebook = new ArrayList<>();
+    static final String TAG = "inMainActivity";
+
+    ArrayAdapter<Note> arrayAdapter;
+    ListView notes;
+    Button createNewNote;
+    List<Note> notebook;
     Note newNote;
-    final String TAG = "inMainActivity";
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -40,8 +45,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (newNote != null) {
             notebook.add(newNote);
+            arrayAdapter.notifyDataSetChanged();
+            Log.d(TAG, "onResume: " + notebook.toString());
             newNote = null;
         }
     }
@@ -49,27 +57,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainLayout layout = new MainLayout(this);
+        setContentView(layout);
 
-        LinearLayout layout = new LinearLayout(this);
-        Button newNote = new Button(this);
-        ListView notesList = new ListView(this);
-
-        layout.setOrientation(LinearLayout.VERTICAL);
-        newNote.setText(R.string.add_note);
-        newNote.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-
-//        final List<Note> notebook = new ArrayList<>();
-        final ArrayAdapter<Note> arrayAdapter = new ArrayAdapter<>(
+        notebook = new ArrayList<>();
+        createNewNote = findViewById(R.id.newNoteButton);
+        notes = findViewById(R.id.notesListView);
+        arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 notebook
         );
-        layout.addView(newNote);
-        notesList.setAdapter(arrayAdapter);
-        layout.addView(notesList);
-        setContentView(layout);
 
-        newNote.setOnClickListener(new View.OnClickListener() {
+//        final List<Note> notebook = new ArrayList<>();
+//        final ArrayAdapter<Note> arrayAdapter = new ArrayAdapter<>(
+//                this,
+//                android.R.layout.simple_list_item_1,
+//                notebook
+//        );
+        notes.setAdapter(arrayAdapter);
+
+        createNewNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        notes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -97,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // TODO remove note from list
+                                Log.d(TAG, "onClick: " + i);
                                 notebook.remove(i);
                                 arrayAdapter.notifyDataSetChanged();
                             }

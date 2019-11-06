@@ -47,6 +47,6 @@ public class Note implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return this.title;
+        return title.length() > 0 ? this.title : "[empty title]";
     }
 }

@@ -4,4 +4,6 @@
     <item name="noteType" type="id"/>
     <item name="noteContent" type="id"/>
     <item name="doneButton" type="id"/>
+    <item name="newNoteButton" type="id"/>
+    <item name="notesListView" type="id"/>
 </resources>
