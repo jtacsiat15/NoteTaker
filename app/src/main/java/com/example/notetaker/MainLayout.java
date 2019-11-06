@@ -16,7 +16,6 @@ public class MainLayout extends GridLayout {
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
         layoutParams.width = LayoutParams.MATCH_PARENT;
         layoutParams.height = LayoutParams.WRAP_CONTENT;
-        //this.setLayoutParams(layoutParams);
 
         newNoteButton = new Button(context);
         newNoteButton.setId(R.id.newNoteButton);

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button createNewNote;
     List<Note> notebook;
     Note newNote;
+    int index;
 
 
     @Override
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             newNote = (Note)data.getSerializableExtra("note");
+            index = data.getIntExtra("index", -1);
 
             Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
         }
@@ -47,10 +49,16 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if (newNote != null) {
-            notebook.add(newNote);
-            arrayAdapter.notifyDataSetChanged();
+            if (index == -1) {
+                notebook.add(newNote);
+                arrayAdapter.notifyDataSetChanged();
+            } else {
+                notebook.set(index, newNote);
+                arrayAdapter.notifyDataSetChanged();
+            }
             Log.d(TAG, "onResume: " + notebook.toString());
             newNote = null;
+            index = -1;
         }
     }
 
@@ -68,13 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 notebook
         );
-
-//        final List<Note> notebook = new ArrayList<>();
-//        final ArrayAdapter<Note> arrayAdapter = new ArrayAdapter<>(
-//                this,
-//                android.R.layout.simple_list_item_1,
-//                notebook
-//        );
         notes.setAdapter(arrayAdapter);
 
         createNewNote.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                 intent.putExtra("note", new Note());
+                intent.putExtra("index", -1);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                 intent.putExtra("note", notebook.get(i));
+                intent.putExtra("index", i);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
@@ -99,20 +102,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+                final int deleteIndex = i;
                 alertBuilder.setTitle("Delete a Note")
                         .setMessage("Are you sure you want to delete your " + adapterView.getItemAtPosition(i) + " note?")
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // TODO remove note from list
-                                Log.d(TAG, "onClick: " + i);
-                                notebook.remove(i);
+                                Log.d(TAG, "delete index: " + i);
+                                notebook.remove(deleteIndex);
                                 arrayAdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("NO", null)
                         .show();
-                return false;
+                return true;
             }
         });
     }
