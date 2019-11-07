@@ -1,9 +1,19 @@
 /**
+ * The layout for the main activity is defined programmatically here. This layout extends
+ * grid layout and contains a Button to create a new note and a ListView to display notes
+ * CPSC 312-01, Fall 2019
+ * Programming Assignment #6
+ * No sources to cite.
+ *
  * @author Alex Giacobbi and Jalen Tacsiat
+ * @version v1.0 11/06/19
+ *
  * Alex contributions:
  * Created elements
+ *
  * Jalen Contributions:
  * Added final touches on MainLayout to match it with example
+ * Setup layout parameters
  */
 package com.example.notetaker;
 

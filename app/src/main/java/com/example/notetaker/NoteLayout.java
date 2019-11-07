@@ -1,7 +1,18 @@
 /**
+ * The layout for NoteActivity is defined programmatically here. This layout uses a two-column
+ * grid layout. There are EditTexts for the user to input a title and content, and a Spinner
+ * to choose the note's type. There is a button at the bottom of the screen to save the note
+ * and return to the home screen
+ * CPSC 312-01, Fall 2019
+ * Programming Assignment #6
+ * No sources to cite.
+ *
  * @author Alex Giacobbi and Jalen Tacsiat
+ * @version v1.0 11/06/19
+ *
  * Jalen Contributions:
  * Created Buttons and EditTexts for the noteActivity layout
+ * Setup layout parameters
  */
 package com.example.notetaker;
 
@@ -25,7 +36,7 @@ public class NoteLayout extends GridLayout {
         layoutParams.rowSpec = GridLayout.spec(1, 1, 1);
         layoutParams.columnSpec = GridLayout.spec(0, 3, 1);
 
-        /**
+        /*
          * creates title editText which will be displayed on the note listview on the main activity
          */
         final EditText noteTitle = new EditText(context);
@@ -35,7 +46,7 @@ public class NoteLayout extends GridLayout {
         noteTitle.setGravity(Gravity.TOP);
         addView(noteTitle);
 
-        /**
+        /*
          * adds spinner type used to allow the user to select the type of note
          */
         final Spinner noteType = new Spinner(context);
@@ -49,7 +60,7 @@ public class NoteLayout extends GridLayout {
         noteType.setGravity(Gravity.TOP);
         addView(noteType);
 
-        /**
+        /*
          * adds EditText named content used to take notes to the screen
          */
         final EditText content = new EditText(context);
@@ -59,7 +70,7 @@ public class NoteLayout extends GridLayout {
         content.setHint("Content");
         addView(content);
 
-        /**
+        /*
          * adds a button called doneButton to the screen
          */
         Button doneButton = new Button(context);

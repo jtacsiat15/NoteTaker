@@ -1,7 +1,17 @@
 /**
+ * This program is the note object used in our note taking app. A note has a title, type, and
+ * content, all of which are strings. We override the toString() method to return the title of
+ * the note if there is one and "[empty title]" if not
+ * CPSC 312-01, Fall 2019
+ * Programming Assignment #6
+ * No sources to cite.
+ *
  * @author Alex Giacobbi and Jalen Tacsiat
+ * @version v1.0 11/06/19
+ *
  * Alex contributions:
  * made Note Serializable
+ *
  * Jalen contributions:
  * created constructors, getters, setters, and toString
  */

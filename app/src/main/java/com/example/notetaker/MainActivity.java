@@ -1,14 +1,22 @@
 /**
- * Alex Giacobbi and Jalen Tacsiat
+ * This program is the main activity of a note taking app. It displays notes to a user and
+ * allows the user to select a note to edit, create a new note, or select a note to delete
+ * CPSC 312-01, Fall 2019
+ * Programming Assignment #6
+ * No sources to cite.
+ *
+ * @author Alex Giacobbi and Jalen Tacsiat
+ * @version v1.0 11/06/19
+ *
  * Alex contributions:
  * Designed activity listeners
  * Formed Intents that are passed between activities
  * Created data structure to store notes in
+ *
  * Jalen contributions:
  * Initially connected MainActivity class with NoteActivityClass
  * Created note Class
  * Created NoteLayout class for the noteActivity
- *
  */
 package com.example.notetaker;
 
@@ -17,17 +25,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;

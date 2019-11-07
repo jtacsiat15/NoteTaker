@@ -1,9 +1,19 @@
 /**
+ * This program is the note edit activity of a note taking app. Here, the user can set a
+ * title for the note, fill the note with content, and choose a category for the note using
+ * a spinner
+ * CPSC 312-01, Fall 2019
+ * Programming Assignment #6
+ * No sources to cite.
+ *
  * @author Alex Giacobbi and Jalen Tacsiat
+ * @version v1.0 11/06/19
+ *
  * Alex contributions:
  * mangaged loading in note from intent
  * formed intents to pass back to MainActivity
  * set spinner to type specified in note
+ *
  * Jalen contributions:
  * Created listeners for buttons
  */
