@@ -1,3 +1,8 @@
+/**
+ * @author Alex Giacobbi and Jalen Tacsiat
+ * Jalen Contributions:
+ * Created Buttons and EditTexts for the noteActivity layout
+ */
 package com.example.notetaker;
 
 import android.content.Context;

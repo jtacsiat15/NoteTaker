@@ -2,6 +2,8 @@
  * @author Alex Giacobbi and Jalen Tacsiat
  * Alex contributions:
  * Created elements
+ * Jalen Contributions:
+ * Added final touches on MainLayout to match it with example
  */
 package com.example.notetaker;
 

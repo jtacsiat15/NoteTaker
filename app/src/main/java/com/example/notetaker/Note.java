@@ -2,6 +2,8 @@
  * @author Alex Giacobbi and Jalen Tacsiat
  * Alex contributions:
  * made Note Serializable
+ * Jalen contributions:
+ * created constructors, getters, setters, and toString
  */
 
 package com.example.notetaker;
@@ -12,7 +14,6 @@ import androidx.annotation.NonNull;
 
 /**
  * Note class that contains fields for each note object
- *
  */
 public class Note implements Serializable {
     private String title;

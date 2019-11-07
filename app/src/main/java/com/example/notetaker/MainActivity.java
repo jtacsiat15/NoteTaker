@@ -4,6 +4,11 @@
  * Designed activity listeners
  * Formed Intents that are passed between activities
  * Created data structure to store notes in
+ * Jalen contributions:
+ * Initially connected MainActivity class with NoteActivityClass
+ * Created note Class
+ * Created NoteLayout class for the noteActivity
+ *
  */
 package com.example.notetaker;
 
@@ -27,14 +32,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Jalen Tacsiat -
- * Initially connected MainActivity class with NoteActivityClass
- * Created note Class
- * Created NoteLayout class for the noteActivity
- * Added final touches on MainLayout to match it with example
- */
 
 /**
  * This class is the main activity of our notes app. Here, users will be able

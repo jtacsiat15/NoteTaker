@@ -4,6 +4,8 @@
  * mangaged loading in note from intent
  * formed intents to pass back to MainActivity
  * set spinner to type specified in note
+ * Jalen contributions:
+ * Created listeners for buttons
  */
 
 package com.example.notetaker;
