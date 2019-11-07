@@ -22,6 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Jalen Tacsiat -
+ * Initially connected MainActivity class with NoteActivityClass
+ * Created note Class
+ * Created NoteLayout class for the noteActivity
+ * Added final touches on MainLayout to match it with example
+ */
+
+/**
  * This class is the main activity of our notes app. Here, users will be able
  * to create a new note, view a list of their existing notes, select a note to
  * edit and delete a note by long pressing. When a user is finished creating or

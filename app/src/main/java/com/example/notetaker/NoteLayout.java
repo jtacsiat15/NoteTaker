@@ -8,6 +8,9 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Spinner;
 
+/**
+ * This class is used to create the note layout using gridLayout
+ */
 public class NoteLayout extends GridLayout {
     public NoteLayout(final Context context){
         super(context);
@@ -17,7 +20,9 @@ public class NoteLayout extends GridLayout {
         layoutParams.rowSpec = GridLayout.spec(1, 1, 1);
         layoutParams.columnSpec = GridLayout.spec(0, 3, 1);
 
-        //creates title editText
+        /**
+         * creates title editText which will be displayed on the note listview on the main activity
+         */
         final EditText noteTitle = new EditText(context);
         noteTitle.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1/2), GridLayout.spec(0, 2, 30)));
         noteTitle.setHint("Title");
@@ -25,7 +30,9 @@ public class NoteLayout extends GridLayout {
         noteTitle.setGravity(Gravity.TOP);
         addView(noteTitle);
 
-        //adds spinner type
+        /**
+         * adds spinner type used to allow the user to select the type of note
+         */
         final Spinner noteType = new Spinner(context);
         noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1/2), GridLayout.spec(2, 1, 1)));
         noteType.setId(R.id.noteType);
@@ -37,16 +44,19 @@ public class NoteLayout extends GridLayout {
         noteType.setGravity(Gravity.TOP);
         addView(noteType);
 
-        //adds content to take notes with
+        /**
+         * adds EditText named content used to take notes to the screen
+         */
         final EditText content = new EditText(context);
         content.setLayoutParams(layoutParams);
         content.setId(R.id.noteContent);
         content.setGravity(Gravity.TOP);
-
         content.setHint("Content");
         addView(content);
 
-        //adds done button
+        /**
+         * adds a button called doneButton to the screen
+         */
         Button doneButton = new Button(context);
         GridLayout.LayoutParams buttonParams = new LayoutParams();
         buttonParams.rowSpec = GridLayout.spec(2, 1, 1/2);
