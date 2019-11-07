@@ -1,3 +1,11 @@
+/**
+ * @author Alex Giacobbi and Jalen Tacsiat
+ * Alex contributions:
+ * mangaged loading in note from intent
+ * formed intents to pass back to MainActivity
+ * set spinner to type specified in note
+ */
+
 package com.example.notetaker;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,3 +1,10 @@
+/**
+ * Alex Giacobbi and Jalen Tacsiat
+ * Alex contributions:
+ * Designed activity listeners
+ * Formed Intents that are passed between activities
+ * Created data structure to store notes in
+ */
 package com.example.notetaker;
 
 import androidx.annotation.Nullable;

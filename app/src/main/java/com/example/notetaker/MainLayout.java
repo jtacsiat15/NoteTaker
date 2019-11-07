@@ -1,3 +1,8 @@
+/**
+ * @author Alex Giacobbi and Jalen Tacsiat
+ * Alex contributions:
+ * Created elements
+ */
 package com.example.notetaker;
 
 import android.content.Context;
