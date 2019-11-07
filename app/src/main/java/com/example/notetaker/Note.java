@@ -1,3 +1,9 @@
+/**
+ * @author Alex Giacobbi and Jalen Tacsiat
+ * Alex contributions:
+ * made Note Serializable
+ */
+
 package com.example.notetaker;
 
 import java.io.Serializable;
