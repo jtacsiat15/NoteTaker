@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<Note> arrayAdapter;
     private List<Note> notebook;
-    private Note newNote;
-    private int index;
 
 
     /**
@@ -65,10 +63,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            newNote = (Note)data.getSerializableExtra("note");
-            index = data.getIntExtra("index", -1);
+            if (data != null) {
+                Note newNote = (Note) data.getSerializableExtra("note");
+                int index = data.getIntExtra("index", -1);
+                int id = data.getIntExtra("id", -1);
+                NoteOpenHelper helper = new NoteOpenHelper(this);
 
-            Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
+                Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
+
+                if (index == -1) {
+                    notebook.add(newNote);
+                    //helper.insertNote(newNote);
+                    arrayAdapter.notifyDataSetChanged();
+                } else {
+                    notebook.set(index, newNote);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 
@@ -80,19 +91,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (newNote != null) {
-            if (index == -1) {
-                notebook.add(newNote);
-                arrayAdapter.notifyDataSetChanged();
-            } else {
-                notebook.set(index, newNote);
-                arrayAdapter.notifyDataSetChanged();
-            }
-            Log.d(TAG, "onResume: " + notebook.toString());
-            newNote = null;
-            index = -1;
-        }
     }
 
 

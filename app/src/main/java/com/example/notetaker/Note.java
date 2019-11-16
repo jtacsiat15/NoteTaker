@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
  * Note class that contains fields for each note object
  */
 public class Note implements Serializable {
+    private int id;
     private String title;
     private String content;
     private String type;
@@ -35,6 +36,7 @@ public class Note implements Serializable {
      * Gives fields blank values
      */
     public Note(){
+        this.id = -1;
         this.title="";
         this.content="";
         this.type="";
@@ -50,6 +52,14 @@ public class Note implements Serializable {
         this.title = type;
         this.content = content;
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

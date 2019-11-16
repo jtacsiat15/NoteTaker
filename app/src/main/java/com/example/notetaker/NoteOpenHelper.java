@@ -39,22 +39,70 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
     }
 
     public void insertNote(Note note) {
+        String sqlInsert = "INSERT INTO " + TABLE_NOTE + " VALUES(null, '" +
+                note.getTitle() + "', '" +
+                note.getType() + "', " +
+                note.getContent() + ")";
+        Log.d(TAG, "insertNote: " + sqlInsert);
 
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlInsert);
+        db.close();
     }
 
     public Note getNoteById(int id) {
+        Note note = new Note();
+        String sqlSelect = "SELECT * FROM " + TABLE_NOTE +
+                " WHERE _id = " + id;
+        Log.d(TAG, "selectAll: " + sqlSelect);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        if (cursor.moveToNext()) {
+            note.setId(cursor.getInt(0));
+            note.setTitle(cursor.getString(1));
+            note.setType(cursor.getString(2));
+            note.setContent(cursor.getString(3));
+            db.close();
+            return note;
+        }
+
+        db.close();
         return null;
     }
 
     public Cursor getAllNotes() {
-        return null;
+        String sqlSelect = "SELECT * FROM " + TABLE_NOTE;
+        Log.d(TAG, "selectAll: " + sqlSelect);
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        return cursor;
     }
 
     public void deleteNote(int id) {
+        String sqlDelete = "DELETE FROM " + TABLE_NOTE +
+                " WHERE " + ID + " = " + id;
+        Log.d(TAG, "deleteNote: " + sqlDelete);
 
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlDelete);
+        db.close();
     }
 
     public void updateNote(int id, Note note) {
+        String sqlUpdate = "UPDATE " + TABLE_NOTE +
+                " SET " + TITLE + " = '" + note.getTitle() + "', " +
+                TYPE  + " = '" + note.getType() + "', " +
+                CONTENT + " = '" + note.getContent() +
+                "' WHERE " + ID + " = " + id;
+        Log.d(TAG, "updateNote: " + sqlUpdate);
 
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlUpdate);
+        db.close();
     }
 }
