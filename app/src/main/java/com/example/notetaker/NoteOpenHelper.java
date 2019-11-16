@@ -1,0 +1,60 @@
+package com.example.notetaker;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class NoteOpenHelper extends SQLiteOpenHelper {
+    private static final String TAG = "SQLiteFunTag";
+
+    private static final String DATABASE_NAME = "noteDatabase";
+    private static final int DATABASE_VERSION = 1;
+
+    private static final String TABLE_NOTE = "Note";
+    private static final String ID = "_id"; // _id is for use with adapters later
+    private static final String TITLE = "title";
+    private static final String TYPE = "note_type";
+    private static final String CONTENT = "content";
+
+    public NoteOpenHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        String sqlCreate = "CREATE TABLE " + TABLE_NOTE +
+                "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TITLE + " TEXT, " +
+                TYPE + " TEXT, " +
+                CONTENT + " TEXT)";
+        Log.d(TAG, "Create Table: " + sqlCreate);
+        sqLiteDatabase.execSQL(sqlCreate);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
+
+    public void insertNote(Note note) {
+
+    }
+
+    public Note getNoteById(int id) {
+        return null;
+    }
+
+    public Cursor getAllNotes() {
+        return null;
+    }
+
+    public void deleteNote(int id) {
+
+    }
+
+    public void updateNote(int id, Note note) {
+
+    }
+}
