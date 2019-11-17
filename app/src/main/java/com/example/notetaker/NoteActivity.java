@@ -43,7 +43,7 @@ public class NoteActivity extends AppCompatActivity {
     static final int OTHER = 3;
 
     private Note note;
-    private int index;
+    private int id;
 
     /**
      * When activity is initialized, note is gathered from intent and view is updated
@@ -59,12 +59,12 @@ public class NoteActivity extends AppCompatActivity {
         final EditText noteTitle = findViewById(R.id.noteTitle);
         final EditText content = findViewById(R.id.noteContent);
         final Spinner noteType = findViewById(R.id.noteType);
-        index = -1;
+        id = -1;
 
         Intent intent = getIntent();
         if(intent != null){
             note = (Note)intent.getSerializableExtra("note");
-            index = intent.getIntExtra("index", -1);
+            id = intent.getIntExtra("id", -1);
             noteTitle.setText(note.getTitle());
             content.setText(note.getContent());
         }
@@ -108,7 +108,7 @@ public class NoteActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(NoteActivity.this, MainActivity.class);
                 intent.putExtra("note", note);
-                intent.putExtra("index", index);
+                intent.putExtra("id", id);
                 setResult(RESULT_OK, intent);
                 NoteActivity.this.finish();
             }

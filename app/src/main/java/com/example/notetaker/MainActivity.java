@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
     static final String TAG = "inMainActivity";
 
-    private ArrayAdapter<Note> arrayAdapter;
-    private List<Note> notebook;
+    //private ArrayAdapter<Note> arrayAdapter;
+    private SimpleCursorAdapter cursorAdapter;
+    //private List<Note> notebook;
 
 
     /**
@@ -65,32 +68,24 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             if (data != null) {
                 Note newNote = (Note) data.getSerializableExtra("note");
-                int index = data.getIntExtra("index", -1);
                 int id = data.getIntExtra("id", -1);
                 NoteOpenHelper helper = new NoteOpenHelper(this);
 
                 Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
 
-                if (index == -1) {
-                    notebook.add(newNote);
-                    //helper.insertNote(newNote);
-                    arrayAdapter.notifyDataSetChanged();
+                if (id == -1) {
+                    //notebook.add(newNote);
+                    helper.insertNote(newNote);
+                    Cursor cursor = helper.getAllNotes();
+                    cursorAdapter.changeCursor(cursor);
                 } else {
-                    notebook.set(index, newNote);
-                    arrayAdapter.notifyDataSetChanged();
+                    //notebook.set(id, newNote);
+                    helper.updateNote(id, newNote);
+                    Cursor cursor = helper.getAllNotes();
+                    cursorAdapter.changeCursor(cursor);
                 }
             }
         }
-    }
-
-    /**
-     * After activity result is gathered, note from result is inserted into list or
-     * edited note is updated in the list. If index == -1, note is a new note to insert
-     * else index is the note's position in the list of notes
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
 
@@ -106,15 +101,28 @@ public class MainActivity extends AppCompatActivity {
         MainLayout layout = new MainLayout(this);
         setContentView(layout);
 
-        notebook = new ArrayList<>();
-        Button createNewNote = findViewById(R.id.newNoteButton);
-        ListView notes = findViewById(R.id.notesListView);
+        /*notebook = new ArrayList<>();
         arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 notebook
         );
-        notes.setAdapter(arrayAdapter);
+        notes.setAdapter(arrayAdapter);*/
+
+        Button createNewNote = findViewById(R.id.newNoteButton);
+        ListView notes = findViewById(R.id.notesListView);
+        final NoteOpenHelper helper = new NoteOpenHelper(this);
+        Cursor cursor = helper.getAllNotes();
+
+        cursorAdapter = new SimpleCursorAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                cursor,
+                new String[] {NoteOpenHelper.TITLE},
+                new int[] {android.R.id.text1},
+                0 // leave default
+        );
+        notes.setAdapter(cursorAdapter);
 
         createNewNote.setOnClickListener(new View.OnClickListener() {
             /**
@@ -125,8 +133,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+
                 intent.putExtra("note", new Note());
-                intent.putExtra("index", -1);
+                intent.putExtra("id", -1);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
@@ -143,8 +152,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-                intent.putExtra("note", notebook.get(i));
-                intent.putExtra("index", i);
+                long id = cursorAdapter.getItemId(i);
+                Note note = helper.getNoteById((int)id);
+
+                intent.putExtra("note", note);
+                intent.putExtra("id", id);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
@@ -163,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
                 final int deleteIndex = i;
+                final long id = cursorAdapter.getItemId(i);
+
                 alertBuilder.setTitle("Delete a Note")
                         .setMessage("Are you sure you want to delete your " + adapterView.getItemAtPosition(i) + " note?")
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -174,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Log.d(TAG, "delete index: " + i);
-                                notebook.remove(deleteIndex);
-                                arrayAdapter.notifyDataSetChanged();
+                                helper.deleteNote((int)id);
+                                cursorAdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("NO", null)

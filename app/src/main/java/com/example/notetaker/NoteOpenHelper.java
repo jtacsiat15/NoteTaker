@@ -14,9 +14,9 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_NOTE = "Note";
     private static final String ID = "_id"; // _id is for use with adapters later
-    private static final String TITLE = "title";
     private static final String TYPE = "note_type";
     private static final String CONTENT = "content";
+    static final String TITLE = "title";
 
     public NoteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,8 +41,8 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
     public void insertNote(Note note) {
         String sqlInsert = "INSERT INTO " + TABLE_NOTE + " VALUES(null, '" +
                 note.getTitle() + "', '" +
-                note.getType() + "', " +
-                note.getContent() + ")";
+                note.getType() + "', '" +
+                note.getContent() + "')";
         Log.d(TAG, "insertNote: " + sqlInsert);
 
         SQLiteDatabase db = getWritableDatabase();
