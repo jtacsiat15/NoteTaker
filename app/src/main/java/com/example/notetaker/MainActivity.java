@@ -20,6 +20,7 @@
  */
 package com.example.notetaker;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -124,13 +128,13 @@ public class MainActivity extends AppCompatActivity {
         );
         notes.setAdapter(cursorAdapter);
 
-        createNewNote.setOnClickListener(new View.OnClickListener() {
+        /*createNewNote.setOnClickListener(new View.OnClickListener() {
             /**
              * Click listener for the new note button. Creates an intent that passes a new note
              * object to NoteActivity and index -1 to indicate a new note
              * @param view a button element
              */
-            @Override
+            /*@Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
 
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("id", -1);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
-        });
+        });*/
 
         notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
@@ -197,5 +201,39 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        String TAG = "itemSelectedTag";
+        switch (id) {
+            case R.id.addMenuItem:
+                //add a note
+                Log.d(TAG, "in add");
+                Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+                intent.putExtra("note", new Note());
+                intent.putExtra("index", -1);
+                startActivityForResult(intent, LOGIN_REQUEST_CODE);
+                //Toast.makeText(this, "add item", Toast.LENGTH_SHORT);
+                return true;
+            case R.id.deleteMenuItem:
+                //delete items
+                Log.d(TAG, "in delete");
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+                /*alertBuilder.setTitle("Delete all Notes")
+                        .setMessage("Are you sure you want to delete all notes?")
+                        .setPositiveButton("YES", )*/
+
+                //Toast.makeText(this, "delete item", Toast.LENGTH_SHORT);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

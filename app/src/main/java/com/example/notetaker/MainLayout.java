@@ -40,11 +40,11 @@ public class MainLayout extends GridLayout {
         layoutParams.columnSpec = GridLayout.spec(0, 1, 1);
 
         //creates newNoteButton and adds it to the screen
-        newNoteButton = new Button(context);
+        /*newNoteButton = new Button(context);
         newNoteButton.setId(R.id.newNoteButton);
         newNoteButton.setText(R.string.add_note);
         newNoteButton.setLayoutParams(layoutParams);
-        this.addView(newNoteButton);
+        this.addView(newNoteButton);*/
 
         //creates layout parameters for the listView
         GridLayout.LayoutParams notesListLayout = new GridLayout.LayoutParams();
