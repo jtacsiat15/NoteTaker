@@ -31,15 +31,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
     static final String TAG = "inMainActivity";
 
-    //private ArrayAdapter<Note> arrayAdapter;
+    private ArrayAdapter<Note> arrayAdapter;
     private SimpleCursorAdapter cursorAdapter;
-    //private List<Note> notebook;
+    private List<Note> notebook;
 
 
     /**
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MainLayout layout = new MainLayout(this);
         setContentView(layout);
+        //ListView notes = findViewById(R.id.notesListView);
 
         /*notebook = new ArrayList<>();
         arrayAdapter = new ArrayAdapter<>(
@@ -113,20 +117,58 @@ public class MainActivity extends AppCompatActivity {
         );
         notes.setAdapter(arrayAdapter);*/
 
-        Button createNewNote = findViewById(R.id.newNoteButton);
-        ListView notes = findViewById(R.id.notesListView);
+        //Button createNewNote = findViewById(R.id.newNoteButton);
+        final ListView notes = findViewById(R.id.notesListView);
         final NoteOpenHelper helper = new NoteOpenHelper(this);
         Cursor cursor = helper.getAllNotes();
 
         cursorAdapter = new SimpleCursorAdapter(
                 this,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_activated_1,
                 cursor,
                 new String[] {NoteOpenHelper.TITLE},
                 new int[] {android.R.id.text1},
                 0 // leave default
         );
         notes.setAdapter(cursorAdapter);
+
+        notes.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        notes.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                MenuInflater menuInflater = getMenuInflater();
+                menuInflater.inflate(R.menu.context_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.deleteMenuItem:
+                        String temp = notes.getCheckedItemPositions().toString();
+                        Log.d("inContextMode: ", temp);
+                        Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
+                        actionMode.finish(); // exit CAM
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+
+            }
+        });
 
         /*createNewNote.setOnClickListener(new View.OnClickListener() {
             /**
@@ -226,9 +268,16 @@ public class MainActivity extends AppCompatActivity {
                 //delete items
                 Log.d(TAG, "in delete");
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
-                /*alertBuilder.setTitle("Delete all Notes")
+                alertBuilder.setTitle("Delete all Notes")
                         .setMessage("Are you sure you want to delete all notes?")
-                        .setPositiveButton("YES", )*/
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setNegativeButton("NO", null)
+                        .show();
 
                 //Toast.makeText(this, "delete item", Toast.LENGTH_SHORT);
                 return true;
