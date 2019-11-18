@@ -7,12 +7,17 @@
  * No sources to cite.
  *
  * @author Alex Giacobbi and Jalen Tacsiat
- * @version v1.0 11/06/19
+ * @version v2.0 11/06/19
  *
  * Alex contributions:
  * mangaged loading in note from intent
  * formed intents to pass back to MainActivity
  * set spinner to type specified in note
+ *
+ * Minor changes to the intent structure to reflect
+ *  use of database ids
+ * Added a back button to return users to the MainActivity
+ *   case they don't want to save their changes
  *
  * Jalen contributions:
  * Created listeners for buttons
@@ -51,6 +56,7 @@ public class NoteActivity extends AppCompatActivity {
      * When activity is initialized, note is gathered from intent and view is updated
      * to reflect current note contents. Sets up click listener for done button and
      * connects all view elements from layout
+     *
      * @param savedInstanceState bundle saved instance
      */
     @Override
@@ -81,6 +87,7 @@ public class NoteActivity extends AppCompatActivity {
         noteType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             /**
              * Sets the note type when a new type is selected from the spinner
+             *
              * @param adapterView adapter view for type selection spinner
              * @param view spinner element
              * @param i index of spinner selection
@@ -121,6 +128,7 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -137,6 +145,7 @@ public class NoteActivity extends AppCompatActivity {
 
     /**
      * Gets the index in the adapter of a string type
+     *
      * @return int indicating index in spinner of a certain type
      */
     private int getAdapterIndex() {

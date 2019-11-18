@@ -6,12 +6,19 @@
  * No sources to cite.
  *
  * @author Alex Giacobbi and Jalen Tacsiat
- * @version v1.0 11/06/19
+ * @version v2.0 11/06/19
  *
  * Alex contributions:
  * Designed activity listeners
  * Formed Intents that are passed between activities
  * Created data structure to store notes in
+ *
+ * Connected the list of notes to the database
+ * Refactored logic for all operations:
+ *   create note
+ *   edit note
+ *   delete note
+ *   delete all
  *
  * Jalen contributions:
  * Initially connected MainActivity class with NoteActivityClass
@@ -64,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * When user finishes creating note, gets index and note from intent extras
+     * When user finishes creating note, gets index and note from intent extras, inserts
+     * or updates the note and refreshes the view
+     *
      * @param requestCode a request code
      * @param resultCode activity result code
      * @param data intent received as result
@@ -96,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Runs when app's main activity is created. Sets up click listeners for the new note
-     * button and the adapter and listeners for the listview containing the notes. Initializes
-     * a notebook to store notes in
+     * button and the adapter and listeners for the listview containing the notes. Connects
+     * listview to the database with a cursor adapter
+     *
      * @param savedInstanceState bundle containing saved state
      */
     @Override
@@ -127,6 +137,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+
+            /**
+             * Inflates the CAM menu
+             *
+             * @param actionMode the action mode
+             * @param menu the menu for this context
+             * @return true if menu is inflated successfully
+             */
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 MenuInflater menuInflater = getMenuInflater();
@@ -139,6 +157,15 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
+
+            /**
+             * Handles an action selection by a user in CAM. Only action for this menu is to delete
+             * selected notes
+             *
+             * @param actionMode the action mode
+             * @param menuItem the selected menu item
+             * @return true if request is handled, false otherwise
+             */
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()){
@@ -172,11 +199,12 @@ public class MainActivity extends AppCompatActivity {
         notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
              * Click listener for the array adapter. Creates an intent to pass the selected note
-             * to NoteActivity and the index of the note to be edited in the ArrayList.
+             * to NoteActivity and the _id of the note in the database.
+             *
              * @param adapterView adapter view for our note list
              * @param view the listview that user is selecting from
              * @param i index selected
-             * @param l
+             * @param l the _id of the note in the database
              */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -194,6 +222,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Inflates the app bar menu
+     *
+     * @param menu the menu for this activity
+     * @return true if inflated successfully
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -202,6 +236,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Listener for when a menu item is selected. Performs action indicated by the
+     * selected menu item
+     *
+     * @param item the selected item
+     * @return true if action is handled, false otherwise
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
