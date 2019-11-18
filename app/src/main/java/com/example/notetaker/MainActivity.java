@@ -248,22 +248,23 @@ public class MainActivity extends AppCompatActivity {
             public void bindView(View view, Context context, Cursor cursor) {
                 super.bindView(view, context, cursor);
 
-                TextView noteTitle = findViewById(R.id.title);
-                ImageView icon = findViewById(R.id.image);
+                TextView noteTitle = view.findViewById(R.id.title);
+                ImageView icon = view.findViewById(R.id.image);
                 String type = cursor.getString(2);
+                Log.d(TAG, "bindView: " + type);
 
                 noteTitle.setText(cursor.getString(1));
 
                 switch (type) {
                     case "Work":
                         icon.setImageResource(R.drawable.projectmanagement);
-
+                        break;
                     case "School":
                         icon.setImageResource(R.drawable.classroom);
-
+                        break;
                     case "Other":
-                        icon.setImageResource(R.drawable.multipleuserssillhouette);
-
+                        icon.setImageResource(R.drawable.multipleuserssilhouette);
+                        break;
                     default:
                         icon.setImageResource(R.drawable.responsive);
                 }
