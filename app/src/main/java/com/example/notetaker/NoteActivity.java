@@ -37,6 +37,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 /**
  * This class is the activity for users to edit a note. Users can change the title,
@@ -114,16 +115,21 @@ public class NoteActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View view) {
-                note.setTitle(noteTitle.getText().toString());
-                note.setContent(content.getText().toString());
-                Log.d(TAG, "Title: " + note.getTitle() + " Content: " + note.getContent() + " Type: " +  note.getType());
+                if(noteTitle.getText().toString().equals("")){
+                    Toast toast = Toast.makeText(NoteActivity.this, "Title is Empty, please add a title", Toast.LENGTH_LONG);
+                    toast.show();
+                }else {
+                    note.setTitle(noteTitle.getText().toString());
+                    note.setContent(content.getText().toString());
+                    Log.d(TAG, "Title: " + note.getTitle() + " Content: " + note.getContent() + " Type: " + note.getType());
 
-                Intent intent = new Intent(NoteActivity.this, MainActivity.class);
-                intent.putExtra("note", note);
-                intent.putExtra("id", id);
-                Log.d(TAG, "NoteID: " + id);
-                setResult(RESULT_OK, intent);
-                NoteActivity.this.finish();
+                    Intent intent = new Intent(NoteActivity.this, MainActivity.class);
+                    intent.putExtra("note", note);
+                    intent.putExtra("id", id);
+                    Log.d(TAG, "NoteID: " + id);
+                    setResult(RESULT_OK, intent);
+                    NoteActivity.this.finish();
+                }
             }
         });
     }
