@@ -29,8 +29,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = data.getIntExtra("id", -1);
                 NoteOpenHelper helper = new NoteOpenHelper(this);
 
-                Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
+                Log.d(TAG, "id: " + id);
 
                 if (id == -1) {
                     helper.insertNote(newNote);
@@ -141,9 +143,20 @@ public class MainActivity extends AppCompatActivity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.deleteMenuItem:
-                        String temp = notes.getCheckedItemPositions().toString();
-                        Log.d("inContextMode: ", temp);
-                        Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
+                        SparseBooleanArray checked = notes.getCheckedItemPositions();
+                        NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
+                        Log.d(TAG, "onActionItemClicked: " + checked.toString());
+
+                        for (int i = 0; i < checked.size(); i++) {
+                            if (checked.valueAt(i)) {
+                                int id = (int) cursorAdapter.getItemId(checked.keyAt(i));
+                                helper.deleteNote(id);
+                                Log.d(TAG, "onActionItemClicked: " + id + ", " + i);
+                            }
+                        }
+
+                        Cursor cursor = helper.getAllNotes();
+                        cursorAdapter.changeCursor(cursor);
                         actionMode.finish(); // exit CAM
                         return true;
                 }
@@ -169,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                 int id = (int) cursorAdapter.getItemId(i);
-                Note note = helper.getNoteById((int)id);
+                Log.d(TAG, "onItemClick POSITION: " + i);
+                Note note = helper.getNoteById(id);
 
                 intent.putExtra("note", note);
                 intent.putExtra("id", id);
@@ -178,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            /**
+        /*notes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            *//**
              * Executes when a user long clicks on an element. Shows popup menu to delete
              * an item in a list. If user confirms, item is removed from the list
              * @param adapterView adapter view of the list
@@ -187,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
              * @param i index of click
              * @param l
              * @return true if event is handled, false otherwise
-             */
+             *//*
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -197,11 +211,11 @@ public class MainActivity extends AppCompatActivity {
                 alertBuilder.setTitle("Delete a Note")
                         .setMessage("Are you sure you want to delete your " + adapterView.getItemAtPosition(i) + " note?")
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            /**
+                            *//**
                              * Deletes a note when user confirms delete in popup dialog box
                              * @param dialogInterface a dialog box
                              * @param i
-                             */
+                             *//*
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Log.d(TAG, "delete index: " + i);
@@ -213,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                         .show();
                 return true;
             }
-        });
+        });*/
     }
 
 
@@ -248,7 +262,10 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
+                                helper.deleteAllNotes();
+                                Cursor cursor = helper.getAllNotes();
+                                cursorAdapter.changeCursor(cursor);
                             }
                         })
                         .setNegativeButton("NO", null)

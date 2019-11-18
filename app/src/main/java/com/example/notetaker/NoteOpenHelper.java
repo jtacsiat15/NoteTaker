@@ -83,6 +83,16 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public void deleteAllNotes() {
+        String sqlDelete = "DELETE FROM " + TABLE_NOTE;
+        Log.d(TAG, "deleteAllNotes: " + sqlDelete);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sqlDelete);
+        db.close();
+    }
+
+
     public void deleteNote(int id) {
         String sqlDelete = "DELETE FROM " + TABLE_NOTE +
                 " WHERE " + ID + " = " + id;
