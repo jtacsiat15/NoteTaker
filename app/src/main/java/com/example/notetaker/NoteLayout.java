@@ -17,15 +17,23 @@
 package com.example.notetaker;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * This class is used to create the note layout using gridLayout
@@ -55,21 +63,68 @@ public class NoteLayout extends GridLayout {
         final Spinner noteType = new Spinner(context);
         noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1/2), GridLayout.spec(2, 1, 1)));
         noteType.setId(R.id.noteType);
-        ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
+        /*ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 context,
                 R.array.noteTypesArray,
-                android.R.layout.simple_spinner_item);
+                android.R.layout.simple_spinner_item);*/
         List<String> typesList = new ArrayList<String>();
 
-        /*typesList.add("Personal");
+        typesList.add("Personal");
         typesList.add("School");
         typesList.add("Work");
-        typesList.add("Other");*/
+        typesList.add("Other");
 
-        /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_item, R.array.noteTypesArray);
-        /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1, typesList);*/
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.activity_list_item, android.R.id.text1, typesList){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                switch(position) {
+                    case 0:
+                        ImageView personalImage = (ImageView) view.findViewById(android.R.id.icon);
+                        personalImage.setImageResource(R.drawable.responsive);
+                        break;
+                    case 1:
+                        ImageView schoolImage = (ImageView) view.findViewById(android.R.id.icon);
+                        schoolImage.setImageResource(R.drawable.classroom);
+                        break;
+                    case 2:
+                        ImageView workImage = (ImageView) view.findViewById(android.R.id.icon);
+                        workImage.setImageResource(R.drawable.projectmanagement);
+                        break;
+                    case 3:
+                        ImageView otherImage = (ImageView) view.findViewById(android.R.id.icon);
+                        otherImage.setImageResource(R.drawable.multipleuserssilhouette);
+                        break;
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                switch(position){
+                    case 0:
+                        ImageView personalImage = (ImageView)view.findViewById(android.R.id.icon);
+                        personalImage.setImageResource(R.drawable.responsive);
+                        break;
+                    case 1:
+                        ImageView schoolImage = (ImageView)view.findViewById(android.R.id.icon);
+                        schoolImage.setImageResource(R.drawable.classroom);
+                        break;
+                    case 2:
+                        ImageView workImage = (ImageView)view.findViewById(android.R.id.icon);
+                        workImage.setImageResource(R.drawable.projectmanagement);
+                        break;
+                    case 3:
+                        ImageView otherImage = (ImageView)view.findViewById(android.R.id.icon);
+                        otherImage.setImageResource(R.drawable.multipleuserssilhouette);
+                        break;
+                }
+                return view;
+            }
+        };
 
         noteType.setAdapter(spinnerArrayAdapter);
         noteType.setGravity(Gravity.TOP);
