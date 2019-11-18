@@ -7,12 +7,17 @@
  * No sources to cite.
  *
  * @author Alex Giacobbi and Jalen Tacsiat
- * @version v1.0 11/06/19
+ * @version v2.0 11/06/19
  *
  * Alex contributions:
  * mangaged loading in note from intent
  * formed intents to pass back to MainActivity
  * set spinner to type specified in note
+ *
+ * Minor changes to the intent structure to reflect
+ *  use of database ids
+ * Added a back button to return users to the MainActivity
+ *   case they don't want to save their changes
  *
  * Jalen contributions:
  * Created listeners for buttons
@@ -20,11 +25,13 @@
 
 package com.example.notetaker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,7 +43,7 @@ import android.widget.Spinner;
  * content, type and save the note when they are finished.
  */
 public class NoteActivity extends AppCompatActivity {
-    final String TAG = "inNoteActivity";
+    static final String TAG = "inNoteActivity";
     static final int PERSONAL = 0;
     static final int SCHOOL = 1;
     static final int WORK = 2;
@@ -49,6 +56,7 @@ public class NoteActivity extends AppCompatActivity {
      * When activity is initialized, note is gathered from intent and view is updated
      * to reflect current note contents. Sets up click listener for done button and
      * connects all view elements from layout
+     *
      * @param savedInstanceState bundle saved instance
      */
     @Override
@@ -56,6 +64,8 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         NoteLayout noteLayout = new NoteLayout(this);
         setContentView(noteLayout);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final EditText noteTitle = findViewById(R.id.noteTitle);
         final EditText content = findViewById(R.id.noteContent);
         final Spinner noteType = findViewById(R.id.noteType);
@@ -77,10 +87,11 @@ public class NoteActivity extends AppCompatActivity {
         noteType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             /**
              * Sets the note type when a new type is selected from the spinner
+             *
              * @param adapterView adapter view for type selection spinner
              * @param view spinner element
              * @param i index of spinner selection
-             * @param l
+             * @param l _id of an item
              */
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -117,8 +128,24 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     /**
      * Gets the index in the adapter of a string type
+     *
      * @return int indicating index in spinner of a certain type
      */
     private int getAdapterIndex() {

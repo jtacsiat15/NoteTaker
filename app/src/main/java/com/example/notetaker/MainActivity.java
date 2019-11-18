@@ -6,12 +6,19 @@
  * No sources to cite.
  *
  * @author Alex Giacobbi and Jalen Tacsiat
- * @version v1.0 11/06/19
+ * @version v2.0 11/06/19
  *
  * Alex contributions:
  * Designed activity listeners
  * Formed Intents that are passed between activities
  * Created data structure to store notes in
+ *
+ * Connected the list of notes to the database
+ * Refactored logic for all operations:
+ *   create note
+ *   edit note
+ *   delete note
+ *   delete all
  *
  * Jalen contributions:
  * Initially connected MainActivity class with NoteActivityClass
@@ -29,8 +36,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * When user finishes creating note, gets index and note from intent extras
+     * When user finishes creating note, gets index and note from intent extras, inserts
+     * or updates the note and refreshes the view
+     *
      * @param requestCode a request code
      * @param resultCode activity result code
      * @param data intent received as result
@@ -76,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = data.getIntExtra("id", -1);
                 NoteOpenHelper helper = new NoteOpenHelper(this);
 
-                Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
+                Log.d(TAG, "id: " + id);
 
                 if (id == -1) {
                     helper.insertNote(newNote);
@@ -94,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Runs when app's main activity is created. Sets up click listeners for the new note
-     * button and the adapter and listeners for the listview containing the notes. Initializes
-     * a notebook to store notes in
+     * button and the adapter and listeners for the listview containing the notes. Connects
+     * listview to the database with a cursor adapter
+     *
      * @param savedInstanceState bundle containing saved state
      */
     @Override
@@ -127,6 +139,14 @@ public class MainActivity extends AppCompatActivity {
                 //Log.d("inItemCheckedStateChanged");
             }
 
+
+            /**
+             * Inflates the CAM menu
+             *
+             * @param actionMode the action mode
+             * @param menu the menu for this context
+             * @return true if menu is inflated successfully
+             */
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 MenuInflater menuInflater = getMenuInflater();
@@ -139,18 +159,33 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
+
+            /**
+             * Handles an action selection by a user in CAM. Only action for this menu is to delete
+             * selected notes
+             *
+             * @param actionMode the action mode
+             * @param menuItem the selected menu item
+             * @return true if request is handled, false otherwise
+             */
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.deleteMenuItem:
-                        String temp = notes.getCheckedItemPositions().toString();
-                        Log.d("inContextMode: ", temp);
-                        Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
-                        for(int i = 0; i < amountSelected; i++){
-
+            SparseBooleanArray checked = notes.getCheckedItemPositions();
+                    NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
+                    Log.d(TAG, "onActionItemClicked: " + checked.toString());
+                    for (int i = 0; i < checked.size(); i++) {
+                        if (checked.valueAt(i)) {
+                            int id = (int) cursorAdapter.getItemId(checked.keyAt(i));
+                            helper.deleteNote(id);
+                            Log.d(TAG, "onActionItemClicked: " + id + ", " + i);
                         }
-                        actionMode.finish(); // exit CAM
-                        return true;
+                    }
+                    Cursor cursor = helper.getAllNotes();
+                    cursorAdapter.changeCursor(cursor);
+                    actionMode.finish(); // exit CAM
+                    return true;
                 }
                 return false;
             }
@@ -164,17 +199,19 @@ public class MainActivity extends AppCompatActivity {
         notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
              * Click listener for the array adapter. Creates an intent to pass the selected note
-             * to NoteActivity and the index of the note to be edited in the ArrayList.
+             * to NoteActivity and the _id of the note in the database.
+             *
              * @param adapterView adapter view for our note list
              * @param view the listview that user is selecting from
              * @param i index selected
-             * @param l
+             * @param l the _id of the note in the database
              */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                 int id = (int) cursorAdapter.getItemId(i);
-                Note note = helper.getNoteById((int)id);
+                Log.d(TAG, "onItemClick POSITION: " + i);
+                Note note = helper.getNoteById(id);
 
                 intent.putExtra("note", note);
                 intent.putExtra("id", id);
@@ -182,46 +219,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
-
-        notes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            /**
-             * Executes when a user long clicks on an element. Shows popup menu to delete
-             * an item in a list. If user confirms, item is removed from the list
-             * @param adapterView adapter view of the list
-             * @param view a listview containing notes
-             * @param i index of click
-             * @param l
-             * @return true if event is handled, false otherwise
-             */
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
-                final int deleteIndex = i;
-                final long id = cursorAdapter.getItemId(i);
-
-                alertBuilder.setTitle("Delete a Note")
-                        .setMessage("Are you sure you want to delete your " + adapterView.getItemAtPosition(i) + " note?")
-                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            /**
-                             * Deletes a note when user confirms delete in popup dialog box
-                             * @param dialogInterface a dialog box
-                             * @param i
-                             */
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Log.d(TAG, "delete index: " + i);
-                                helper.deleteNote((int)id);
-                                cursorAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("NO", null)
-                        .show();
-                return true;
-            }
-        });
     }
 
 
+    /**
+     * Inflates the app bar menu
+     *
+     * @param menu the menu for this activity
+     * @return true if inflated successfully
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -230,6 +236,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Listener for when a menu item is selected. Performs action indicated by the
+     * selected menu item
+     *
+     * @param item the selected item
+     * @return true if action is handled, false otherwise
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -253,7 +266,10 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
+                                helper.deleteAllNotes();
+                                Cursor cursor = helper.getAllNotes();
+                                cursorAdapter.changeCursor(cursor);
                             }
                         })
                         .setNegativeButton("NO", null)
