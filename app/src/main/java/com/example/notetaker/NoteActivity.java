@@ -20,11 +20,13 @@
 
 package com.example.notetaker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,7 +38,7 @@ import android.widget.Spinner;
  * content, type and save the note when they are finished.
  */
 public class NoteActivity extends AppCompatActivity {
-    final String TAG = "inNoteActivity";
+    static final String TAG = "inNoteActivity";
     static final int PERSONAL = 0;
     static final int SCHOOL = 1;
     static final int WORK = 2;
@@ -56,6 +58,8 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         NoteLayout noteLayout = new NoteLayout(this);
         setContentView(noteLayout);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final EditText noteTitle = findViewById(R.id.noteTitle);
         final EditText content = findViewById(R.id.noteContent);
         final Spinner noteType = findViewById(R.id.noteType);
@@ -80,7 +84,7 @@ public class NoteActivity extends AppCompatActivity {
              * @param adapterView adapter view for type selection spinner
              * @param view spinner element
              * @param i index of spinner selection
-             * @param l
+             * @param l _id of an item
              */
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -116,6 +120,20 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     /**
      * Gets the index in the adapter of a string type

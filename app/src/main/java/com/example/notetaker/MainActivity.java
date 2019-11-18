@@ -191,43 +191,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
-
-        /*notes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            *//**
-             * Executes when a user long clicks on an element. Shows popup menu to delete
-             * an item in a list. If user confirms, item is removed from the list
-             * @param adapterView adapter view of the list
-             * @param view a listview containing notes
-             * @param i index of click
-             * @param l
-             * @return true if event is handled, false otherwise
-             *//*
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
-                final int deleteIndex = i;
-                final long id = cursorAdapter.getItemId(i);
-
-                alertBuilder.setTitle("Delete a Note")
-                        .setMessage("Are you sure you want to delete your " + adapterView.getItemAtPosition(i) + " note?")
-                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            *//**
-                             * Deletes a note when user confirms delete in popup dialog box
-                             * @param dialogInterface a dialog box
-                             * @param i
-                             *//*
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Log.d(TAG, "delete index: " + i);
-                                helper.deleteNote((int)id);
-                                cursorAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("NO", null)
-                        .show();
-                return true;
-            }
-        });*/
     }
 
 
