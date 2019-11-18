@@ -33,6 +33,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -41,20 +42,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * This class is the main activity of our notes app. Here, users will be able
@@ -120,14 +127,15 @@ public class MainActivity extends AppCompatActivity {
         final NoteOpenHelper helper = new NoteOpenHelper(this);
         Cursor cursor = helper.getAllNotes();
 
-        cursorAdapter = new SimpleCursorAdapter(
+        /*cursorAdapter = new SimpleCursorAdapter(
                 this,
                 android.R.layout.simple_list_item_activated_1,
                 cursor,
                 new String[] {NoteOpenHelper.TITLE},
                 new int[] {android.R.id.text1},
                 0 // leave default
-        );
+        );*/
+        setupCustomAdapter();
         notes.setAdapter(cursorAdapter);
 
         notes.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -219,6 +227,49 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
+    }
+
+    private void setupCustomAdapter() {
+        NoteOpenHelper helper = new NoteOpenHelper(this);
+        Cursor cursor = helper.getAllNotes();
+        cursorAdapter = new SimpleCursorAdapter(MainActivity.this,
+                android.R.layout.simple_list_item_activated_1,
+                cursor,
+                new String[] {NoteOpenHelper.TITLE},
+                new int[] {android.R.id.text1},
+                0) {
+            @Override
+            public View newView(Context context, Cursor cursor, ViewGroup parent) {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                return inflater.inflate(R.layout.custom_list_item, null);
+            }
+
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                super.bindView(view, context, cursor);
+
+                TextView noteTitle = findViewById(R.id.title);
+                ImageView icon = findViewById(R.id.image);
+                String type = cursor.getString(2);
+
+                noteTitle.setText(cursor.getString(1));
+
+                switch (type) {
+                    case "Work":
+                        icon.setImageResource(R.drawable.projectmanagement);
+
+                    case "School":
+                        icon.setImageResource(R.drawable.classroom);
+
+                    case "Other":
+                        icon.setImageResource(R.drawable.multipleuserssillhouette);
+
+                    default:
+                        icon.setImageResource(R.drawable.responsive);
+                }
+
+            }
+        };
     }
 
 
