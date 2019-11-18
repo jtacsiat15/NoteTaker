@@ -65,6 +65,7 @@ public class NoteActivity extends AppCompatActivity {
         if(intent != null){
             note = (Note)intent.getSerializableExtra("note");
             id = intent.getIntExtra("id", -1);
+            Log.d(TAG, "onCreate id: " + id);
             noteTitle.setText(note.getTitle());
             content.setText(note.getContent());
         }
@@ -109,6 +110,7 @@ public class NoteActivity extends AppCompatActivity {
                 Intent intent = new Intent(NoteActivity.this, MainActivity.class);
                 intent.putExtra("note", note);
                 intent.putExtra("id", id);
+                Log.d(TAG, "NoteID: " + id);
                 setResult(RESULT_OK, intent);
                 NoteActivity.this.finish();
             }

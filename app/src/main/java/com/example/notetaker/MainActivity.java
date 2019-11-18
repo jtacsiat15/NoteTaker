@@ -58,9 +58,7 @@ public class MainActivity extends AppCompatActivity {
     static final int LOGIN_REQUEST_CODE = 1;
     static final String TAG = "inMainActivity";
 
-    private ArrayAdapter<Note> arrayAdapter;
     private SimpleCursorAdapter cursorAdapter;
-    private List<Note> notebook;
 
 
     /**
@@ -81,12 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Title: " + newNote.getTitle() + " content: " + newNote.getContent() + " Type: " + newNote.getType());
 
                 if (id == -1) {
-                    //notebook.add(newNote);
                     helper.insertNote(newNote);
                     Cursor cursor = helper.getAllNotes();
                     cursorAdapter.changeCursor(cursor);
                 } else {
-                    //notebook.set(id, newNote);
                     helper.updateNote(id, newNote);
                     Cursor cursor = helper.getAllNotes();
                     cursorAdapter.changeCursor(cursor);
@@ -107,17 +103,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MainLayout layout = new MainLayout(this);
         setContentView(layout);
-        //ListView notes = findViewById(R.id.notesListView);
 
-        /*notebook = new ArrayList<>();
-        arrayAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                notebook
-        );
-        notes.setAdapter(arrayAdapter);*/
-
-        //Button createNewNote = findViewById(R.id.newNoteButton);
         final ListView notes = findViewById(R.id.notesListView);
         final NoteOpenHelper helper = new NoteOpenHelper(this);
         Cursor cursor = helper.getAllNotes();
@@ -170,22 +156,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*createNewNote.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Click listener for the new note button. Creates an intent that passes a new note
-             * object to NoteActivity and index -1 to indicate a new note
-             * @param view a button element
-             */
-            /*@Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-
-                intent.putExtra("note", new Note());
-                intent.putExtra("id", -1);
-                startActivityForResult(intent, LOGIN_REQUEST_CODE);
-            }
-        });*/
-
         notes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
              * Click listener for the array adapter. Creates an intent to pass the selected note
@@ -198,11 +168,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-                long id = cursorAdapter.getItemId(i);
+                int id = (int) cursorAdapter.getItemId(i);
                 Note note = helper.getNoteById((int)id);
 
                 intent.putExtra("note", note);
                 intent.putExtra("id", id);
+                Log.d(TAG, "NoteID: " + id);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
         });
@@ -244,12 +215,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
