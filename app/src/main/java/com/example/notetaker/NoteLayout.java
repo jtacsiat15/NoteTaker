@@ -24,6 +24,9 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class is used to create the note layout using gridLayout
  */
@@ -56,6 +59,18 @@ public class NoteLayout extends GridLayout {
                 context,
                 R.array.noteTypesArray,
                 android.R.layout.simple_spinner_item);
+        List<String> typesList = new ArrayList<String>();
+
+        /*typesList.add("Personal");
+        typesList.add("School");
+        typesList.add("Work");
+        typesList.add("Other");*/
+
+        /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_item, R.array.noteTypesArray);
+        /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_2, android.R.id.text1, typesList);*/
+
         noteType.setAdapter(spinnerArrayAdapter);
         noteType.setGravity(Gravity.TOP);
         addView(noteType);

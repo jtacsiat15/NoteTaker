@@ -134,9 +134,11 @@ public class MainActivity extends AppCompatActivity {
 
         notes.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         notes.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            int amountSelected;
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-
+                amountSelected++;
+                //Log.d("inItemCheckedStateChanged");
             }
 
             @Override
@@ -158,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
                         String temp = notes.getCheckedItemPositions().toString();
                         Log.d("inContextMode: ", temp);
                         Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
+                        for(int i = 0; i < amountSelected; i++){
+
+                        }
                         actionMode.finish(); // exit CAM
                         return true;
                 }
