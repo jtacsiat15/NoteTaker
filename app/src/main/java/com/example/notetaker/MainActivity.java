@@ -140,9 +140,11 @@ public class MainActivity extends AppCompatActivity {
 
         notes.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         notes.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            int amountSelected;
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-
+                amountSelected++;
+                //Log.d("inItemCheckedStateChanged");
             }
 
 
@@ -178,22 +180,20 @@ public class MainActivity extends AppCompatActivity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.deleteMenuItem:
-                        SparseBooleanArray checked = notes.getCheckedItemPositions();
-                        NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
-                        Log.d(TAG, "onActionItemClicked: " + checked.toString());
-
-                        for (int i = 0; i < checked.size(); i++) {
-                            if (checked.valueAt(i)) {
-                                int id = (int) cursorAdapter.getItemId(checked.keyAt(i));
-                                helper.deleteNote(id);
-                                Log.d(TAG, "onActionItemClicked: " + id + ", " + i);
-                            }
+            SparseBooleanArray checked = notes.getCheckedItemPositions();
+                    NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
+                    Log.d(TAG, "onActionItemClicked: " + checked.toString());
+                    for (int i = 0; i < checked.size(); i++) {
+                        if (checked.valueAt(i)) {
+                            int id = (int) cursorAdapter.getItemId(checked.keyAt(i));
+                            helper.deleteNote(id);
+                            Log.d(TAG, "onActionItemClicked: " + id + ", " + i);
                         }
-
-                        Cursor cursor = helper.getAllNotes();
-                        cursorAdapter.changeCursor(cursor);
-                        actionMode.finish(); // exit CAM
-                        return true;
+                    }
+                    Cursor cursor = helper.getAllNotes();
+                    cursorAdapter.changeCursor(cursor);
+                    actionMode.finish(); // exit CAM
+                    return true;
                 }
                 return false;
             }
