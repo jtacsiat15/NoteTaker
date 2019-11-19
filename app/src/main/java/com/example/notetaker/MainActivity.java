@@ -24,6 +24,9 @@
  * Initially connected MainActivity class with NoteActivityClass
  * Created note Class
  * Created NoteLayout class for the noteActivity
+ * Created menu add and delete options
+ * Added icons to spinner
+ * Added contextual action mode for long clicking a note
  */
 package com.example.notetaker;
 

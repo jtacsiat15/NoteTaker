@@ -13,6 +13,7 @@
  * Jalen Contributions:
  * Created Buttons and EditTexts for the noteActivity layout
  * Setup layout parameters
+ * Added icons to spinner
  */
 package com.example.notetaker;
 
@@ -63,17 +64,20 @@ public class NoteLayout extends GridLayout {
         final Spinner noteType = new Spinner(context);
         noteType.setLayoutParams(new GridLayout.LayoutParams(GridLayout.spec(0, 1, 1/2), GridLayout.spec(2, 1, 1)));
         noteType.setId(R.id.noteType);
-        /*ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
-                context,
-                R.array.noteTypesArray,
-                android.R.layout.simple_spinner_item);*/
         List<String> typesList = new ArrayList<String>();
 
+        //creates list to keep containing note types
         typesList.add("Personal");
         typesList.add("School");
         typesList.add("Work");
         typesList.add("Other");
 
+        /**
+         * creates array adapter for spinner
+         * uses activity list item to set icon to corresponding note type
+         * getView displays image of selected note type
+         * getDropDownView displays the image of each note type when dropdown menu is opened
+         */
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.activity_list_item, android.R.id.text1, typesList){
             @NonNull
