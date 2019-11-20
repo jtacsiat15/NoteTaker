@@ -3,7 +3,16 @@
  * allows the user to select a note to edit, create a new note, or select a note to delete
  * CPSC 312-01, Fall 2019
  * Programming Assignment #6
- * No sources to cite.
+ * Sources to Site
+ * Icons Used
+ * School Icon used:
+ * <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+ * Work Icon used:
+ * <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+ * Personal Icon used:
+ * <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+ * Other icon used:
+ * <div>Icons made by <a href="https://www.flaticon.com/authors/ddara" title="dDara">dDara</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
  *
  * @author Alex Giacobbi and Jalen Tacsiat
  * @version v2.0 11/06/19
@@ -24,6 +33,7 @@
  * Initially connected MainActivity class with NoteActivityClass
  * Created note Class
  * Created NoteLayout class for the noteActivity
+ *
  * Created menu add and delete options
  * Added icons to spinner
  * Added contextual action mode for long clicking a note
@@ -183,11 +193,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.deleteMenuItem:
-            SparseBooleanArray checked = notes.getCheckedItemPositions();
-                    NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
-                    Log.d(TAG, "onActionItemClicked: " + checked.toString());
-                    for (int i = 0; i < checked.size(); i++) {
-                        if (checked.valueAt(i)) {
+                        SparseBooleanArray checked = notes.getCheckedItemPositions();
+                        NoteOpenHelper helper = new NoteOpenHelper(MainActivity.this);
+                        Log.d(TAG, "onActionItemClicked: " + checked.toString());
+                        for (int i = 0; i < checked.size(); i++) {
+                            if (checked.valueAt(i)) {
                             int id = (int) cursorAdapter.getItemId(checked.keyAt(i));
                             helper.deleteNote(id);
                             Log.d(TAG, "onActionItemClicked: " + id + ", " + i);
