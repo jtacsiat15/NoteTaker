@@ -37,6 +37,7 @@
  * Created menu add and delete options
  * Added icons to spinner
  * Added contextual action mode for long clicking a note
+ * Added amount selected tracker in contextual action mode
  */
 package com.example.notetaker;
 
@@ -156,7 +157,9 @@ public class MainActivity extends AppCompatActivity {
             int amountSelected;
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                amountSelected++;
+                amountSelected = notes.getCheckedItemCount();
+                actionMode.setTitle(amountSelected + " selected");
+
                 //Log.d("inItemCheckedStateChanged");
             }
 
